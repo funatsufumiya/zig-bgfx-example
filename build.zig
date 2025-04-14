@@ -6,8 +6,8 @@ const bgfx = @import("build_bgfx.zig");
 const sc = @import("build_shader_compiler.zig");
 // const tp = @import("build_texture_packer.zig");
 
-const LibExeObjStep = std.build.LibExeObjStep;
-const Builder = std.build.Builder;
+const CompileStep = std.Build.Step.Compile;
+const Builder = std.Build.Builder;
 const CrossTarget = std.zig.CrossTarget;
 const Pkg = std.build.Pkg;
 
@@ -25,20 +25,24 @@ pub fn build(b: *std.Build) void {
     // EXE
      const exe = b.addExecutable(.{
         .name = "zig-bgfx-example",
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
 
+    const isWindows = target.result.os.tag == .windows;
+    const isMac = target.result.os.tag == .macos;
+
     // sdl2
-    if (target.isDarwin()){
+    if (isMac){
         // Add SDL2, include path may vary
         // exe.addIncludePath(.{ .path = "/usr/local/include/SDL2"});
         // exe.linkSystemLibrary("sdl2");
 
-        exe.addFrameworkPath(.{ .path = "3rdparty/sdl2/osx"});
-        exe.linkSystemLibrary("sdl2");
-        // exe.linkFramework("sdl2");
+        exe.addFrameworkPath(b.path("3rdparty/sdl2/osx"));
+        // exe.linkSystemLibrary("sdl2");
+        exe.linkFramework("SDL2");
+        exe.addRPath(b.path("3rdparty/sdl2/osx"));
         exe.linkFramework("Foundation");
         exe.linkFramework("CoreFoundation");
         exe.linkFramework("Cocoa");
@@ -47,9 +51,9 @@ pub fn build(b: *std.Build) void {
         exe.linkFramework("IOKit");
         exe.linkFramework("Metal");
     }
-    else if (target.isWindows()) {
-        exe.addIncludePath(.{ .path = "3rdparty/sdl2/windows/include"});
-        exe.addLibraryPath(.{ .path = "3rdparty/sdl2/windows/win64"});
+    else if (isWindows) {
+        exe.addIncludePath(b.path("3rdparty/sdl2/windows/include"));
+        exe.addLibraryPath(b.path("3rdparty/sdl2/windows/win64"));
         exe.linkSystemLibrary("sdl2");
         exe.linkSystemLibrary("opengl32");
         exe.linkSystemLibrary("gdi32");
@@ -70,24 +74,26 @@ pub fn build(b: *std.Build) void {
     );
     const zmath_options = zmath_options_step.createModule();
     const zmath = b.addModule("zmath", .{
-        .source_file = .{ .path = "3rdparty/zmath/src/zmath.zig" },
-        .dependencies = &.{
+        .root_source_file = b.path("3rdparty/zmath/src/zmath.zig"),
+        .imports = &.{
             .{ .name = "zmath_options", .module = zmath_options },
         },
     });
-    exe.addModule("zmath", zmath);
+    // exe.addModule("zmath", zmath);
+    exe.root_module.addImport("zmath", zmath);
 
     // zigstr dependency, pulled via build.zig.zon
     const zigstr = b.dependency("zigstr", .{
         .target = target,
         .optimize = optimize,
     });
-    exe.addModule("zigstr", zigstr.module("zigstr"));
+    // exe.addModule("zigstr", zigstr.module("zigstr"));
+    exe.root_module.addImport("zigstr", zigstr.module("zigstr"));
 
     // Link the bgfx libs
-    bx.link(exe);
-    bimg.link(exe);
-    bgfx.link(exe);
+    bx.link(b, exe, target, optimize);
+    bimg.link(b, exe, target, optimize);
+    bgfx.link(b, exe, target, optimize);
 
     exe.linkSystemLibrary("c");
     exe.linkSystemLibrary("c++");
@@ -111,7 +117,7 @@ pub fn build(b: *std.Build) void {
     addShaderCompilerTaskToBuild(b, shader_compiler_exe, target) catch { };
 }
 
-pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *std.Build.LibExeObjStep, target: std.zig.CrossTarget) !void {
+pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *CompileStep, target: std.Build.ResolvedTarget) !void {
     const compile_shaders_step = b.step("shaders", "Compile Shaders");
     compile_shaders_step.dependOn(b.getInstallStep());
 
@@ -122,7 +128,7 @@ pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *std.Bui
     const shader_dir = "assets/shaders/cubes";
 
     // Find all of the shader files
-    var dir = try std.fs.cwd().openIterableDir(shader_dir, .{});
+    var dir = try std.fs.cwd().openDir(shader_dir, .{ .iterate = true });
     var it = dir.iterate();
     while (try it.next()) |file| {
         if (file.kind != .file) {
@@ -152,7 +158,7 @@ pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *std.Bui
             continue;
 
         // Setup the output path
-        var out_path = try std.mem.concat(b.allocator, u8, &[_][]const u8{path, ".bin"});
+        const out_path = try std.mem.concat(b.allocator, u8, &[_][]const u8{path, ".bin"});
 
         // Run the built shader compiler on this file, with a bunch of args set
         const run_cmd = b.addRunArtifact(shader_compiler_exe);
@@ -173,11 +179,14 @@ pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *std.Bui
         run_cmd.addArg("--type");
         run_cmd.addArg(shader_type);
 
+        const isWindows = target.result.os.tag == .windows;
+        const isMac = target.result.os.tag == .macos;
+
         // TODO: add more platforms
         run_cmd.addArg("--platform");
-        if (target.isDarwin())
+        if (isMac)
             run_cmd.addArg("osx");
-        if (target.isWindows())
+        if (isWindows)
             run_cmd.addArg("windows");
 
         // for now we assume GLSL 400

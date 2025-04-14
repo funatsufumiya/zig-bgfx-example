@@ -3,8 +3,14 @@
     .version = "0.11.1",
     .dependencies = .{
         .zigstr = .{
-            .url = "https://github.com/jecolon/zigstr/archive/refs/tags/v0.11.1.tar.gz",
-            .hash = "12206f2450d6c269835adc8bf676c97db4355dff06848e2a30dfd66bdb767e7d2742",
+            .url = "https://codeberg.org/dude_the_builder/zigstr/archive/v0.13.3.tar.gz",
+            .hash = "1220f9e0e432835046496fdaae7008f0c87e3319d4cc4f72db77494927eff9f89ce4",
         },
+    },
+    .paths = .{
+        "src",
+        "3rdparty/bgfx",
+        "3rdparty/bimg",
+        "3rdparty/bx",
     },
 }

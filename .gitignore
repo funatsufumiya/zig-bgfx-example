@@ -4,3 +4,4 @@ zig-out
 *.rdbg
 .DS_Store
 *.sc.bin
+.zig-cache

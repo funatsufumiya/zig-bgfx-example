@@ -84,7 +84,7 @@ pub fn main() !void {
 
     c.SDL_Log("Creating SDL Window");
 
-    var window = c.SDL_CreateWindow("BGFX Zig Test", c.SDL_WINDOWPOS_UNDEFINED, c.SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, c.SDL_WINDOW_SHOWN | c.SDL_WINDOW_OPENGL | c.SDL_WINDOW_ALLOW_HIGHDPI) orelse
+    const window = c.SDL_CreateWindow("BGFX Zig Test", c.SDL_WINDOWPOS_UNDEFINED, c.SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, c.SDL_WINDOW_SHOWN | c.SDL_WINDOW_OPENGL | c.SDL_WINDOW_ALLOW_HIGHDPI) orelse
         {
         c.SDL_Log("Unable to create window: %s", c.SDL_GetError());
         return error.SDLInitializationFailed;
@@ -164,7 +164,7 @@ pub fn main() !void {
     const state = 0 | bgfx.StateFlags_WriteRgb | bgfx.StateFlags_WriteA | bgfx.StateFlags_WriteZ | bgfx.StateFlags_DepthTestLess | bgfx.StateFlags_CullCcw | bgfx.StateFlags_Msaa;
 
     var quit = false;
-    var start_time: i64 = std.time.milliTimestamp();
+    const start_time = std.time.milliTimestamp();
 
     c.SDL_Log("Main Loop Starting");
 
@@ -186,7 +186,7 @@ pub fn main() !void {
         bgfx.dbgTextClear(0, false);
 
         var yy: f32 = 0;
-        var time: f32 = @as(f32, @floatFromInt(std.time.milliTimestamp() - start_time)) / std.time.ms_per_s;
+        const time = @as(f32, @floatFromInt(std.time.milliTimestamp() - start_time)) / std.time.ms_per_s;
         while (yy < 11) : (yy += 1.0) {
             var xx: f32 = 0;
             while (xx < 11) : (xx += 1.0) {
