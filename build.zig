@@ -32,6 +32,7 @@ pub fn build(b: *std.Build) void {
 
     const isWindows = target.result.os.tag == .windows;
     const isMac = target.result.os.tag == .macos;
+    const isLinux = target.result.os.tag == .linux;
 
     // sdl2
     if (isMac) {
@@ -62,6 +63,15 @@ pub fn build(b: *std.Build) void {
         exe.linkSystemLibrary("oleaut32");
         exe.linkSystemLibrary("imm32");
         exe.linkSystemLibrary("version");
+    } else if (isLinux) {
+        exe.addIncludePath(b.path("3rdparty/sdl2/linux/include"));
+        exe.addLibraryPath(b.path("3rdparty/sdl2/linux/lib"));
+        exe.linkSystemLibrary("SDL2");
+        exe.linkSystemLibrary("GL");
+        exe.linkSystemLibrary("X11");
+        exe.linkSystemLibrary("Xrandr");
+        exe.linkSystemLibrary("Xinerama");
+        exe.linkSystemLibrary("Xi");
     }
 
     // zmath - not a package yet, so manually make the module
@@ -198,6 +208,7 @@ pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *Compile
 
         const isWindows = target.result.os.tag == .windows;
         const isMac = target.result.os.tag == .macos;
+        const isLinux = target.result.os.tag == .linux;
 
         // TODO: add more platforms
         run_cmd.addArg("--platform");
@@ -205,6 +216,8 @@ pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *Compile
             run_cmd.addArg("osx");
         if (isWindows)
             run_cmd.addArg("windows");
+        if (isLinux)
+            run_cmd.addArg("linux");
 
         // for now we assume GLSL 400
         run_cmd.addArg("--profile");

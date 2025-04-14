@@ -16,7 +16,25 @@ pub fn link(b: *std.Build, exe: *CompileStep, target: std.Build.ResolvedTarget, 
 }
 
 fn buildLibrary(b: *std.Build, exe: *CompileStep, target: std.Build.ResolvedTarget, optimize: std.builtin.OptimizeMode) *CompileStep {
-    const cxx_options = [_][]const u8{
+    const isMac = target.result.os.tag == .macos;
+    const isLinux = target.result.os.tag == .linux;
+
+    const linux_cxx_options = [_][]const u8{
+        "-fno-strict-aliasing",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-ffast-math",
+        "-DBX_CONFIG_DEBUG",
+        "-DBGFX_CONFIG_USE_TINYSTL=0",
+        "-DBGFX_CONFIG_MULTITHREADED=0",
+        "-DBGFX_CONFIG_RENDERER_DIRECT3D9=0",
+        "-DBGFX_CONFIG_RENDERER_DIRECT3D11=0",
+        "-DBGFX_CONFIG_RENDERER_DIRECT3D12=0",
+        "-DBGFX_CONFIG_RENDERER_GNM=0",
+        "-DBGFX_CONFIG_RENDERER_OPENGLES=0",
+    };
+
+    const default_cxx_options = [_][]const u8{
         "-fno-strict-aliasing",
         "-fno-exceptions",
         "-fno-rtti",
@@ -25,6 +43,8 @@ fn buildLibrary(b: *std.Build, exe: *CompileStep, target: std.Build.ResolvedTarg
         "-DBGFX_CONFIG_USE_TINYSTL=0",
         "-DBGFX_CONFIG_MULTITHREADED=0", // OSX does not support multithreaded rendering
     };
+
+    const cxx_options = if (isLinux) &linux_cxx_options else &default_cxx_options;
 
     const bgfx_module = exe.step.owner.createModule(.{
         .root_source_file = b.path(bgfx_path ++ "bindings/zig/bgfx.zig"),
@@ -44,16 +64,19 @@ fn buildLibrary(b: *std.Build, exe: *CompileStep, target: std.Build.ResolvedTarg
     bgfx_lib.addIncludePath(b.path(bgfx_path ++ "3rdparty/khronos/"));
     bgfx_lib.addIncludePath(b.path(bgfx_path ++ "src/"));
 
-    const isMac = target.result.os.tag == .macos;
-
     if (isMac) {
-        bgfx_lib.addCSourceFile(.{ .file = b.path(bgfx_path ++ "src/amalgamated.mm"), .flags = &cxx_options});
+        bgfx_lib.addCSourceFile(.{ .file = b.path(bgfx_path ++ "src/amalgamated.mm"), .flags = cxx_options });
         bgfx_lib.linkFramework("Foundation");
         bgfx_lib.linkFramework("CoreFoundation");
         bgfx_lib.linkFramework("Cocoa");
         bgfx_lib.linkFramework("QuartzCore");
     } else {
-        bgfx_lib.addCSourceFile(.{ .file = b.path(bgfx_path ++ "src/amalgamated.cpp"), .flags = &cxx_options});
+        bgfx_lib.addCSourceFile(.{ .file = b.path(bgfx_path ++ "src/amalgamated.cpp"), .flags = cxx_options });
+    }
+
+    if (isLinux) {
+        const bx_path = "3rdparty/bx/";
+        bgfx_lib.addIncludePath(b.path(bx_path ++ "include/compat/linux"));
     }
 
     bgfx_lib.want_lto = false;
