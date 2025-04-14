@@ -23,7 +23,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // EXE
-     const exe = b.addExecutable(.{
+    const exe = b.addExecutable(.{
         .name = "zig-bgfx-example",
         .root_source_file = b.path("src/main.zig"),
         .target = target,
@@ -34,7 +34,7 @@ pub fn build(b: *std.Build) void {
     const isMac = target.result.os.tag == .macos;
 
     // sdl2
-    if (isMac){
+    if (isMac) {
         // Add SDL2, include path may vary
         // exe.addIncludePath(.{ .path = "/usr/local/include/SDL2"});
         // exe.linkSystemLibrary("sdl2");
@@ -50,8 +50,7 @@ pub fn build(b: *std.Build) void {
         exe.linkFramework("OpenGL");
         exe.linkFramework("IOKit");
         exe.linkFramework("Metal");
-    }
-    else if (isWindows) {
+    } else if (isWindows) {
         exe.addIncludePath(b.path("3rdparty/sdl2/windows/include"));
         exe.addLibraryPath(b.path("3rdparty/sdl2/windows/win64"));
         exe.linkSystemLibrary("sdl2");
@@ -101,6 +100,24 @@ pub fn build(b: *std.Build) void {
     const install_exe = b.addInstallArtifact(exe, .{});
     b.getInstallStep().dependOn(&install_exe.step);
 
+    // copy dll
+    if (isWindows) {
+        const sdl2_dll = switch (target.result.cpu.arch) {
+            .x86_64 => "3rdparty/sdl2/windows/win64/SDL2.dll",
+            .x86 => "3rdparty/sdl2/windows/win32/SDL2.dll",
+            else => null,
+        };
+
+        if (sdl2_dll) |dll_path| {
+            const sdl2_dll_step = b.addInstallBinFile(b.path(dll_path), "SDL2.dll");
+            b.getInstallStep().dependOn(&sdl2_dll_step.step);
+
+            // if (b.args) |args| {
+            //     args.step.dependOn(&sdl2_dll_step.step);
+            // }
+        }
+    }
+
     // build the shader compiler
     const shader_compiler_exe = sc.build(b, target, optimize);
 
@@ -114,7 +131,7 @@ pub fn build(b: *std.Build) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
-    addShaderCompilerTaskToBuild(b, shader_compiler_exe, target) catch { };
+    addShaderCompilerTaskToBuild(b, shader_compiler_exe, target) catch {};
 }
 
 pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *CompileStep, target: std.Build.ResolvedTarget) !void {
@@ -135,30 +152,30 @@ pub fn addShaderCompilerTaskToBuild(b: *std.Build, shader_compiler_exe: *Compile
             continue;
         }
 
-        const path = try std.fs.path.join(b.allocator, &[_][]const u8{shader_dir, file.name});
+        const path = try std.fs.path.join(b.allocator, &[_][]const u8{ shader_dir, file.name });
         const extension = std.fs.path.extension(file.name);
 
         // Only consider .sc files
-        if(!std.mem.eql(u8, extension, ".sc"))
+        if (!std.mem.eql(u8, extension, ".sc"))
             continue;
 
         // Ignore the varying definition file
-        if(std.mem.startsWith(u8, file.name, "varying.def"))
+        if (std.mem.startsWith(u8, file.name, "varying.def"))
             continue;
 
         // Figure out the type of shader this is
         var shader_type: []const u8 = "";
-        if(std.mem.startsWith(u8, file.name, "fs_"))
+        if (std.mem.startsWith(u8, file.name, "fs_"))
             shader_type = "fragment";
-        if(std.mem.startsWith(u8, file.name, "vs_"))
+        if (std.mem.startsWith(u8, file.name, "vs_"))
             shader_type = "vertex";
 
         // Stop if no type was found!
-        if(shader_type.len == 0)
+        if (shader_type.len == 0)
             continue;
 
         // Setup the output path
-        const out_path = try std.mem.concat(b.allocator, u8, &[_][]const u8{path, ".bin"});
+        const out_path = try std.mem.concat(b.allocator, u8, &[_][]const u8{ path, ".bin" });
 
         // Run the built shader compiler on this file, with a bunch of args set
         const run_cmd = b.addRunArtifact(shader_compiler_exe);
