@@ -22,7 +22,7 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     };
 
     const fcpp_path = "3rdparty/bgfx/3rdparty/fcpp/";
-    const fcpp_lib = b.addStaticLibrary(.{ .name = "fcpp", .target = target, .optimize = build_mode});
+    const fcpp_lib = b.addStaticLibrary(.{ .name = "fcpp", .target = target, .optimize = build_mode });
 
     fcpp_lib.addIncludePath(b.path(fcpp_path));
     fcpp_lib.addCSourceFiles(.{
@@ -52,225 +52,222 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     };
 
     const spirv_opt_path = "3rdparty/bgfx/3rdparty/spirv-tools/";
-    const spirv_opt_lib = b.addStaticLibrary(.{ .name = "spirv-opt", .target = target, .optimize = build_mode});
+    const spirv_opt_lib = b.addStaticLibrary(.{ .name = "spirv-opt", .target = target, .optimize = build_mode });
     spirv_opt_lib.addIncludePath(b.path(spirv_opt_path ++ "include"));
     spirv_opt_lib.addIncludePath(b.path(spirv_opt_path ++ "include/generated"));
     spirv_opt_lib.addIncludePath(b.path(spirv_opt_path ++ "source"));
     spirv_opt_lib.addIncludePath(b.path(spirv_opt_path));
     spirv_opt_lib.addIncludePath(b.path("3rdparty/bgfx/3rdparty/spirv-headers/include"));
 
-    spirv_opt_lib.addCSourceFiles(.{
-        .files = &.{
-            spirv_opt_path ++ "source/assembly_grammar.cpp",
-            spirv_opt_path ++ "source/binary.cpp",
-            spirv_opt_path ++ "source/diagnostic.cpp",
-            spirv_opt_path ++ "source/disassemble.cpp",
-            spirv_opt_path ++ "source/enum_string_mapping.cpp",
-            spirv_opt_path ++ "source/ext_inst.cpp",
-            spirv_opt_path ++ "source/extensions.cpp",
-            spirv_opt_path ++ "source/libspirv.cpp",
-            spirv_opt_path ++ "source/name_mapper.cpp",
-            spirv_opt_path ++ "source/opcode.cpp",
-            spirv_opt_path ++ "source/operand.cpp",
-            spirv_opt_path ++ "source/opt/aggressive_dead_code_elim_pass.cpp",
-            spirv_opt_path ++ "source/opt/analyze_live_input_pass.cpp",
-            spirv_opt_path ++ "source/opt/amd_ext_to_khr.cpp",
-            spirv_opt_path ++ "source/opt/basic_block.cpp",
-            spirv_opt_path ++ "source/opt/block_merge_pass.cpp",
-            spirv_opt_path ++ "source/opt/block_merge_util.cpp",
-            spirv_opt_path ++ "source/opt/build_module.cpp",
-            spirv_opt_path ++ "source/opt/ccp_pass.cpp",
-            spirv_opt_path ++ "source/opt/cfg.cpp",
-            spirv_opt_path ++ "source/opt/cfg_cleanup_pass.cpp",
-            spirv_opt_path ++ "source/opt/code_sink.cpp",
-            spirv_opt_path ++ "source/opt/combine_access_chains.cpp",
-            spirv_opt_path ++ "source/opt/compact_ids_pass.cpp",
-            spirv_opt_path ++ "source/opt/composite.cpp",
-            spirv_opt_path ++ "source/opt/const_folding_rules.cpp",
-            spirv_opt_path ++ "source/opt/constants.cpp",
-            spirv_opt_path ++ "source/opt/convert_to_half_pass.cpp",
-            spirv_opt_path ++ "source/opt/convert_to_sampled_image_pass.cpp",
-            spirv_opt_path ++ "source/opt/copy_prop_arrays.cpp",
-            spirv_opt_path ++ "source/opt/dead_branch_elim_pass.cpp",
-            spirv_opt_path ++ "source/opt/dead_insert_elim_pass.cpp",
-            spirv_opt_path ++ "source/opt/dead_variable_elimination.cpp",
-            spirv_opt_path ++ "source/opt/debug_info_manager.cpp",
-            spirv_opt_path ++ "source/opt/decoration_manager.cpp",
-            spirv_opt_path ++ "source/opt/def_use_manager.cpp",
-            spirv_opt_path ++ "source/opt/desc_sroa.cpp",
-            spirv_opt_path ++ "source/opt/desc_sroa_util.cpp",
-            spirv_opt_path ++ "source/opt/dominator_analysis.cpp",
-            spirv_opt_path ++ "source/opt/dominator_tree.cpp",
-            spirv_opt_path ++ "source/opt/eliminate_dead_constant_pass.cpp",
-            spirv_opt_path ++ "source/opt/eliminate_dead_functions_pass.cpp",
-            spirv_opt_path ++ "source/opt/eliminate_dead_functions_util.cpp",
-            spirv_opt_path ++ "source/opt/eliminate_dead_io_components_pass.cpp",
-            spirv_opt_path ++ "source/opt/eliminate_dead_members_pass.cpp",
-            spirv_opt_path ++ "source/opt/eliminate_dead_output_stores_pass.cpp",
-            spirv_opt_path ++ "source/opt/feature_manager.cpp",
-            spirv_opt_path ++ "source/opt/fix_func_call_arguments.cpp",
-            spirv_opt_path ++ "source/opt/fix_storage_class.cpp",
-            spirv_opt_path ++ "source/opt/flatten_decoration_pass.cpp",
-            spirv_opt_path ++ "source/opt/fold.cpp",
-            spirv_opt_path ++ "source/opt/fold_spec_constant_op_and_composite_pass.cpp",
-            spirv_opt_path ++ "source/opt/folding_rules.cpp",
-            spirv_opt_path ++ "source/opt/freeze_spec_constant_value_pass.cpp",
-            spirv_opt_path ++ "source/opt/function.cpp",
-            spirv_opt_path ++ "source/opt/graphics_robust_access_pass.cpp",
-            spirv_opt_path ++ "source/opt/if_conversion.cpp",
-            spirv_opt_path ++ "source/opt/inline_exhaustive_pass.cpp",
-            spirv_opt_path ++ "source/opt/inline_opaque_pass.cpp",
-            spirv_opt_path ++ "source/opt/inline_pass.cpp",
-            spirv_opt_path ++ "source/opt/inst_bindless_check_pass.cpp",
-            spirv_opt_path ++ "source/opt/inst_buff_addr_check_pass.cpp",
-            spirv_opt_path ++ "source/opt/inst_debug_printf_pass.cpp",
-            spirv_opt_path ++ "source/opt/instruction.cpp",
-            spirv_opt_path ++ "source/opt/instruction_list.cpp",
-            spirv_opt_path ++ "source/opt/instrument_pass.cpp",
-            spirv_opt_path ++ "source/opt/interface_var_sroa.cpp",
-            spirv_opt_path ++ "source/opt/ir_context.cpp",
-            spirv_opt_path ++ "source/opt/ir_loader.cpp",
-            spirv_opt_path ++ "source/opt/licm_pass.cpp",
-            spirv_opt_path ++ "source/opt/liveness.cpp",
-            spirv_opt_path ++ "source/opt/local_access_chain_convert_pass.cpp",
-            spirv_opt_path ++ "source/opt/local_redundancy_elimination.cpp",
-            spirv_opt_path ++ "source/opt/local_single_block_elim_pass.cpp",
-            spirv_opt_path ++ "source/opt/local_single_store_elim_pass.cpp",
-            spirv_opt_path ++ "source/opt/loop_dependence.cpp",
-            spirv_opt_path ++ "source/opt/loop_dependence_helpers.cpp",
-            spirv_opt_path ++ "source/opt/loop_descriptor.cpp",
-            spirv_opt_path ++ "source/opt/loop_fission.cpp",
-            spirv_opt_path ++ "source/opt/loop_fusion.cpp",
-            spirv_opt_path ++ "source/opt/loop_fusion_pass.cpp",
-            spirv_opt_path ++ "source/opt/loop_peeling.cpp",
-            spirv_opt_path ++ "source/opt/loop_unroller.cpp",
-            spirv_opt_path ++ "source/opt/loop_unswitch_pass.cpp",
-            spirv_opt_path ++ "source/opt/loop_utils.cpp",
-            spirv_opt_path ++ "source/opt/interp_fixup_pass.cpp",
-            spirv_opt_path ++ "source/opt/mem_pass.cpp",
-            spirv_opt_path ++ "source/opt/merge_return_pass.cpp",
-            spirv_opt_path ++ "source/opt/module.cpp",
-            spirv_opt_path ++ "source/opt/optimizer.cpp",
-            spirv_opt_path ++ "source/opt/pass.cpp",
-            spirv_opt_path ++ "source/opt/pass_manager.cpp",
-            spirv_opt_path ++ "source/opt/pch_source_opt.cpp",
-            spirv_opt_path ++ "source/opt/private_to_local_pass.cpp",
-            spirv_opt_path ++ "source/opt/propagator.cpp",
-            spirv_opt_path ++ "source/opt/reduce_load_size.cpp",
-            spirv_opt_path ++ "source/opt/redundancy_elimination.cpp",
-            spirv_opt_path ++ "source/opt/remove_dontinline_pass.cpp",
-            spirv_opt_path ++ "source/opt/remove_unused_interface_variables_pass.cpp",
-            spirv_opt_path ++ "source/opt/register_pressure.cpp",
-            spirv_opt_path ++ "source/opt/relax_float_ops_pass.cpp",
-            spirv_opt_path ++ "source/opt/remove_duplicates_pass.cpp",
-            spirv_opt_path ++ "source/opt/replace_invalid_opc.cpp",
-            spirv_opt_path ++ "source/opt/replace_desc_array_access_using_var_index.cpp",
-            spirv_opt_path ++ "source/opt/scalar_analysis.cpp",
-            spirv_opt_path ++ "source/opt/scalar_analysis_simplification.cpp",
-            spirv_opt_path ++ "source/opt/scalar_replacement_pass.cpp",
-            spirv_opt_path ++ "source/opt/set_spec_constant_default_value_pass.cpp",
-            spirv_opt_path ++ "source/opt/simplification_pass.cpp",
-            spirv_opt_path ++ "source/opt/spread_volatile_semantics.cpp",
-            spirv_opt_path ++ "source/opt/ssa_rewrite_pass.cpp",
-            spirv_opt_path ++ "source/opt/strength_reduction_pass.cpp",
-            spirv_opt_path ++ "source/opt/strip_debug_info_pass.cpp",
-            spirv_opt_path ++ "source/opt/strip_nonsemantic_info_pass.cpp",
-            spirv_opt_path ++ "source/opt/struct_cfg_analysis.cpp",
-            spirv_opt_path ++ "source/opt/type_manager.cpp",
-            spirv_opt_path ++ "source/opt/types.cpp",
-            spirv_opt_path ++ "source/opt/unify_const_pass.cpp",
-            spirv_opt_path ++ "source/opt/upgrade_memory_model.cpp",
-            spirv_opt_path ++ "source/opt/value_number_table.cpp",
-            spirv_opt_path ++ "source/opt/vector_dce.cpp",
-            spirv_opt_path ++ "source/opt/workaround1209.cpp",
-            spirv_opt_path ++ "source/opt/wrap_opkill.cpp",
-            spirv_opt_path ++ "source/parsed_operand.cpp",
-            spirv_opt_path ++ "source/print.cpp",
-            spirv_opt_path ++ "source/reduce/change_operand_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/change_operand_to_undef_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/conditional_branch_to_simple_conditional_branch_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/conditional_branch_to_simple_conditional_branch_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/merge_blocks_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/merge_blocks_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/operand_to_const_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/operand_to_dominating_id_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/operand_to_undef_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/pch_source_reduce.cpp",
-            spirv_opt_path ++ "source/reduce/reducer.cpp",
-            spirv_opt_path ++ "source/reduce/reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/reduction_pass.cpp",
-            spirv_opt_path ++ "source/reduce/reduction_util.cpp",
-            spirv_opt_path ++ "source/reduce/remove_block_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/remove_block_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/remove_function_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/remove_function_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/remove_instruction_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/remove_selection_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/remove_selection_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/remove_unused_instruction_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/simple_conditional_branch_to_branch_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/reduce/simple_conditional_branch_to_branch_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/structured_loop_to_selection_reduction_opportunity.cpp",
-            spirv_opt_path ++ "source/reduce/structured_loop_to_selection_reduction_opportunity_finder.cpp",
-            spirv_opt_path ++ "source/software_version.cpp",
-            spirv_opt_path ++ "source/spirv_endian.cpp",
-            spirv_opt_path ++ "source/spirv_optimizer_options.cpp",
-            spirv_opt_path ++ "source/spirv_reducer_options.cpp",
-            spirv_opt_path ++ "source/spirv_target_env.cpp",
-            spirv_opt_path ++ "source/spirv_validator_options.cpp",
-            spirv_opt_path ++ "source/table.cpp",
-            spirv_opt_path ++ "source/text.cpp",
-            spirv_opt_path ++ "source/text_handler.cpp",
-            spirv_opt_path ++ "source/util/bit_vector.cpp",
-            spirv_opt_path ++ "source/util/parse_number.cpp",
-            spirv_opt_path ++ "source/util/string_utils.cpp",
-            spirv_opt_path ++ "source/val/basic_block.cpp",
-            spirv_opt_path ++ "source/val/construct.cpp",
-            spirv_opt_path ++ "source/val/function.cpp",
-            spirv_opt_path ++ "source/val/instruction.cpp",
-            spirv_opt_path ++ "source/val/validate.cpp",
-            spirv_opt_path ++ "source/val/validate_adjacency.cpp",
-            spirv_opt_path ++ "source/val/validate_annotation.cpp",
-            spirv_opt_path ++ "source/val/validate_arithmetics.cpp",
-            spirv_opt_path ++ "source/val/validate_atomics.cpp",
-            spirv_opt_path ++ "source/val/validate_barriers.cpp",
-            spirv_opt_path ++ "source/val/validate_bitwise.cpp",
-            spirv_opt_path ++ "source/val/validate_builtins.cpp",
-            spirv_opt_path ++ "source/val/validate_capability.cpp",
-            spirv_opt_path ++ "source/val/validate_cfg.cpp",
-            spirv_opt_path ++ "source/val/validate_composites.cpp",
-            spirv_opt_path ++ "source/val/validate_constants.cpp",
-            spirv_opt_path ++ "source/val/validate_conversion.cpp",
-            spirv_opt_path ++ "source/val/validate_debug.cpp",
-            spirv_opt_path ++ "source/val/validate_decorations.cpp",
-            spirv_opt_path ++ "source/val/validate_derivatives.cpp",
-            spirv_opt_path ++ "source/val/validate_execution_limitations.cpp",
-            spirv_opt_path ++ "source/val/validate_extensions.cpp",
-            spirv_opt_path ++ "source/val/validate_function.cpp",
-            spirv_opt_path ++ "source/val/validate_id.cpp",
-            spirv_opt_path ++ "source/val/validate_image.cpp",
-            spirv_opt_path ++ "source/val/validate_instruction.cpp",
-            spirv_opt_path ++ "source/val/validate_interfaces.cpp",
-            spirv_opt_path ++ "source/val/validate_layout.cpp",
-            spirv_opt_path ++ "source/val/validate_literals.cpp",
-            spirv_opt_path ++ "source/val/validate_logicals.cpp",
-            spirv_opt_path ++ "source/val/validate_memory.cpp",
-            spirv_opt_path ++ "source/val/validate_memory_semantics.cpp",
-            spirv_opt_path ++ "source/val/validate_mesh_shading.cpp",
-            spirv_opt_path ++ "source/val/validate_misc.cpp",
-            spirv_opt_path ++ "source/val/validate_mode_setting.cpp",
-            spirv_opt_path ++ "source/val/validate_non_uniform.cpp",
-            spirv_opt_path ++ "source/val/validate_primitives.cpp",
-            spirv_opt_path ++ "source/val/validate_ray_query.cpp",
-            spirv_opt_path ++ "source/val/validate_ray_tracing.cpp",
-            spirv_opt_path ++ "source/val/validate_ray_tracing_reorder.cpp",
-            spirv_opt_path ++ "source/val/validate_scopes.cpp",
-            spirv_opt_path ++ "source/val/validate_small_type_uses.cpp",
-            spirv_opt_path ++ "source/val/validate_type.cpp",
-            spirv_opt_path ++ "source/val/validation_state.cpp",
-        }, 
-        .flags = &spirv_opt_cxx_options
-    });
+    spirv_opt_lib.addCSourceFiles(.{ .files = &.{
+        spirv_opt_path ++ "source/assembly_grammar.cpp",
+        spirv_opt_path ++ "source/binary.cpp",
+        spirv_opt_path ++ "source/diagnostic.cpp",
+        spirv_opt_path ++ "source/disassemble.cpp",
+        spirv_opt_path ++ "source/enum_string_mapping.cpp",
+        spirv_opt_path ++ "source/ext_inst.cpp",
+        spirv_opt_path ++ "source/extensions.cpp",
+        spirv_opt_path ++ "source/libspirv.cpp",
+        spirv_opt_path ++ "source/name_mapper.cpp",
+        spirv_opt_path ++ "source/opcode.cpp",
+        spirv_opt_path ++ "source/operand.cpp",
+        spirv_opt_path ++ "source/opt/aggressive_dead_code_elim_pass.cpp",
+        spirv_opt_path ++ "source/opt/analyze_live_input_pass.cpp",
+        spirv_opt_path ++ "source/opt/amd_ext_to_khr.cpp",
+        spirv_opt_path ++ "source/opt/basic_block.cpp",
+        spirv_opt_path ++ "source/opt/block_merge_pass.cpp",
+        spirv_opt_path ++ "source/opt/block_merge_util.cpp",
+        spirv_opt_path ++ "source/opt/build_module.cpp",
+        spirv_opt_path ++ "source/opt/ccp_pass.cpp",
+        spirv_opt_path ++ "source/opt/cfg.cpp",
+        spirv_opt_path ++ "source/opt/cfg_cleanup_pass.cpp",
+        spirv_opt_path ++ "source/opt/code_sink.cpp",
+        spirv_opt_path ++ "source/opt/combine_access_chains.cpp",
+        spirv_opt_path ++ "source/opt/compact_ids_pass.cpp",
+        spirv_opt_path ++ "source/opt/composite.cpp",
+        spirv_opt_path ++ "source/opt/const_folding_rules.cpp",
+        spirv_opt_path ++ "source/opt/constants.cpp",
+        spirv_opt_path ++ "source/opt/convert_to_half_pass.cpp",
+        spirv_opt_path ++ "source/opt/convert_to_sampled_image_pass.cpp",
+        spirv_opt_path ++ "source/opt/copy_prop_arrays.cpp",
+        spirv_opt_path ++ "source/opt/dead_branch_elim_pass.cpp",
+        spirv_opt_path ++ "source/opt/dead_insert_elim_pass.cpp",
+        spirv_opt_path ++ "source/opt/dead_variable_elimination.cpp",
+        spirv_opt_path ++ "source/opt/debug_info_manager.cpp",
+        spirv_opt_path ++ "source/opt/decoration_manager.cpp",
+        spirv_opt_path ++ "source/opt/def_use_manager.cpp",
+        spirv_opt_path ++ "source/opt/desc_sroa.cpp",
+        spirv_opt_path ++ "source/opt/desc_sroa_util.cpp",
+        spirv_opt_path ++ "source/opt/dominator_analysis.cpp",
+        spirv_opt_path ++ "source/opt/dominator_tree.cpp",
+        spirv_opt_path ++ "source/opt/eliminate_dead_constant_pass.cpp",
+        spirv_opt_path ++ "source/opt/eliminate_dead_functions_pass.cpp",
+        spirv_opt_path ++ "source/opt/eliminate_dead_functions_util.cpp",
+        spirv_opt_path ++ "source/opt/eliminate_dead_io_components_pass.cpp",
+        spirv_opt_path ++ "source/opt/eliminate_dead_members_pass.cpp",
+        spirv_opt_path ++ "source/opt/eliminate_dead_output_stores_pass.cpp",
+        spirv_opt_path ++ "source/opt/feature_manager.cpp",
+        spirv_opt_path ++ "source/opt/fix_func_call_arguments.cpp",
+        spirv_opt_path ++ "source/opt/fix_storage_class.cpp",
+        spirv_opt_path ++ "source/opt/flatten_decoration_pass.cpp",
+        spirv_opt_path ++ "source/opt/fold.cpp",
+        spirv_opt_path ++ "source/opt/fold_spec_constant_op_and_composite_pass.cpp",
+        spirv_opt_path ++ "source/opt/folding_rules.cpp",
+        spirv_opt_path ++ "source/opt/freeze_spec_constant_value_pass.cpp",
+        spirv_opt_path ++ "source/opt/function.cpp",
+        spirv_opt_path ++ "source/opt/graphics_robust_access_pass.cpp",
+        spirv_opt_path ++ "source/opt/if_conversion.cpp",
+        spirv_opt_path ++ "source/opt/inline_exhaustive_pass.cpp",
+        spirv_opt_path ++ "source/opt/inline_opaque_pass.cpp",
+        spirv_opt_path ++ "source/opt/inline_pass.cpp",
+        spirv_opt_path ++ "source/opt/inst_bindless_check_pass.cpp",
+        spirv_opt_path ++ "source/opt/inst_buff_addr_check_pass.cpp",
+        spirv_opt_path ++ "source/opt/inst_debug_printf_pass.cpp",
+        spirv_opt_path ++ "source/opt/instruction.cpp",
+        spirv_opt_path ++ "source/opt/instruction_list.cpp",
+        spirv_opt_path ++ "source/opt/instrument_pass.cpp",
+        spirv_opt_path ++ "source/opt/interface_var_sroa.cpp",
+        spirv_opt_path ++ "source/opt/ir_context.cpp",
+        spirv_opt_path ++ "source/opt/ir_loader.cpp",
+        spirv_opt_path ++ "source/opt/licm_pass.cpp",
+        spirv_opt_path ++ "source/opt/liveness.cpp",
+        spirv_opt_path ++ "source/opt/local_access_chain_convert_pass.cpp",
+        spirv_opt_path ++ "source/opt/local_redundancy_elimination.cpp",
+        spirv_opt_path ++ "source/opt/local_single_block_elim_pass.cpp",
+        spirv_opt_path ++ "source/opt/local_single_store_elim_pass.cpp",
+        spirv_opt_path ++ "source/opt/loop_dependence.cpp",
+        spirv_opt_path ++ "source/opt/loop_dependence_helpers.cpp",
+        spirv_opt_path ++ "source/opt/loop_descriptor.cpp",
+        spirv_opt_path ++ "source/opt/loop_fission.cpp",
+        spirv_opt_path ++ "source/opt/loop_fusion.cpp",
+        spirv_opt_path ++ "source/opt/loop_fusion_pass.cpp",
+        spirv_opt_path ++ "source/opt/loop_peeling.cpp",
+        spirv_opt_path ++ "source/opt/loop_unroller.cpp",
+        spirv_opt_path ++ "source/opt/loop_unswitch_pass.cpp",
+        spirv_opt_path ++ "source/opt/loop_utils.cpp",
+        spirv_opt_path ++ "source/opt/interp_fixup_pass.cpp",
+        spirv_opt_path ++ "source/opt/mem_pass.cpp",
+        spirv_opt_path ++ "source/opt/merge_return_pass.cpp",
+        spirv_opt_path ++ "source/opt/module.cpp",
+        spirv_opt_path ++ "source/opt/optimizer.cpp",
+        spirv_opt_path ++ "source/opt/pass.cpp",
+        spirv_opt_path ++ "source/opt/pass_manager.cpp",
+        spirv_opt_path ++ "source/opt/pch_source_opt.cpp",
+        spirv_opt_path ++ "source/opt/private_to_local_pass.cpp",
+        spirv_opt_path ++ "source/opt/propagator.cpp",
+        spirv_opt_path ++ "source/opt/reduce_load_size.cpp",
+        spirv_opt_path ++ "source/opt/redundancy_elimination.cpp",
+        spirv_opt_path ++ "source/opt/remove_dontinline_pass.cpp",
+        spirv_opt_path ++ "source/opt/remove_unused_interface_variables_pass.cpp",
+        spirv_opt_path ++ "source/opt/register_pressure.cpp",
+        spirv_opt_path ++ "source/opt/relax_float_ops_pass.cpp",
+        spirv_opt_path ++ "source/opt/remove_duplicates_pass.cpp",
+        spirv_opt_path ++ "source/opt/replace_invalid_opc.cpp",
+        spirv_opt_path ++ "source/opt/replace_desc_array_access_using_var_index.cpp",
+        spirv_opt_path ++ "source/opt/scalar_analysis.cpp",
+        spirv_opt_path ++ "source/opt/scalar_analysis_simplification.cpp",
+        spirv_opt_path ++ "source/opt/scalar_replacement_pass.cpp",
+        spirv_opt_path ++ "source/opt/set_spec_constant_default_value_pass.cpp",
+        spirv_opt_path ++ "source/opt/simplification_pass.cpp",
+        spirv_opt_path ++ "source/opt/spread_volatile_semantics.cpp",
+        spirv_opt_path ++ "source/opt/ssa_rewrite_pass.cpp",
+        spirv_opt_path ++ "source/opt/strength_reduction_pass.cpp",
+        spirv_opt_path ++ "source/opt/strip_debug_info_pass.cpp",
+        spirv_opt_path ++ "source/opt/strip_nonsemantic_info_pass.cpp",
+        spirv_opt_path ++ "source/opt/struct_cfg_analysis.cpp",
+        spirv_opt_path ++ "source/opt/type_manager.cpp",
+        spirv_opt_path ++ "source/opt/types.cpp",
+        spirv_opt_path ++ "source/opt/unify_const_pass.cpp",
+        spirv_opt_path ++ "source/opt/upgrade_memory_model.cpp",
+        spirv_opt_path ++ "source/opt/value_number_table.cpp",
+        spirv_opt_path ++ "source/opt/vector_dce.cpp",
+        spirv_opt_path ++ "source/opt/workaround1209.cpp",
+        spirv_opt_path ++ "source/opt/wrap_opkill.cpp",
+        spirv_opt_path ++ "source/parsed_operand.cpp",
+        spirv_opt_path ++ "source/print.cpp",
+        spirv_opt_path ++ "source/reduce/change_operand_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/change_operand_to_undef_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/conditional_branch_to_simple_conditional_branch_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/conditional_branch_to_simple_conditional_branch_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/merge_blocks_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/merge_blocks_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/operand_to_const_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/operand_to_dominating_id_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/operand_to_undef_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/pch_source_reduce.cpp",
+        spirv_opt_path ++ "source/reduce/reducer.cpp",
+        spirv_opt_path ++ "source/reduce/reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/reduction_pass.cpp",
+        spirv_opt_path ++ "source/reduce/reduction_util.cpp",
+        spirv_opt_path ++ "source/reduce/remove_block_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/remove_block_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/remove_function_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/remove_function_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/remove_instruction_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/remove_selection_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/remove_selection_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/remove_unused_instruction_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/simple_conditional_branch_to_branch_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/reduce/simple_conditional_branch_to_branch_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/structured_loop_to_selection_reduction_opportunity.cpp",
+        spirv_opt_path ++ "source/reduce/structured_loop_to_selection_reduction_opportunity_finder.cpp",
+        spirv_opt_path ++ "source/software_version.cpp",
+        spirv_opt_path ++ "source/spirv_endian.cpp",
+        spirv_opt_path ++ "source/spirv_optimizer_options.cpp",
+        spirv_opt_path ++ "source/spirv_reducer_options.cpp",
+        spirv_opt_path ++ "source/spirv_target_env.cpp",
+        spirv_opt_path ++ "source/spirv_validator_options.cpp",
+        spirv_opt_path ++ "source/table.cpp",
+        spirv_opt_path ++ "source/text.cpp",
+        spirv_opt_path ++ "source/text_handler.cpp",
+        spirv_opt_path ++ "source/util/bit_vector.cpp",
+        spirv_opt_path ++ "source/util/parse_number.cpp",
+        spirv_opt_path ++ "source/util/string_utils.cpp",
+        spirv_opt_path ++ "source/val/basic_block.cpp",
+        spirv_opt_path ++ "source/val/construct.cpp",
+        spirv_opt_path ++ "source/val/function.cpp",
+        spirv_opt_path ++ "source/val/instruction.cpp",
+        spirv_opt_path ++ "source/val/validate.cpp",
+        spirv_opt_path ++ "source/val/validate_adjacency.cpp",
+        spirv_opt_path ++ "source/val/validate_annotation.cpp",
+        spirv_opt_path ++ "source/val/validate_arithmetics.cpp",
+        spirv_opt_path ++ "source/val/validate_atomics.cpp",
+        spirv_opt_path ++ "source/val/validate_barriers.cpp",
+        spirv_opt_path ++ "source/val/validate_bitwise.cpp",
+        spirv_opt_path ++ "source/val/validate_builtins.cpp",
+        spirv_opt_path ++ "source/val/validate_capability.cpp",
+        spirv_opt_path ++ "source/val/validate_cfg.cpp",
+        spirv_opt_path ++ "source/val/validate_composites.cpp",
+        spirv_opt_path ++ "source/val/validate_constants.cpp",
+        spirv_opt_path ++ "source/val/validate_conversion.cpp",
+        spirv_opt_path ++ "source/val/validate_debug.cpp",
+        spirv_opt_path ++ "source/val/validate_decorations.cpp",
+        spirv_opt_path ++ "source/val/validate_derivatives.cpp",
+        spirv_opt_path ++ "source/val/validate_execution_limitations.cpp",
+        spirv_opt_path ++ "source/val/validate_extensions.cpp",
+        spirv_opt_path ++ "source/val/validate_function.cpp",
+        spirv_opt_path ++ "source/val/validate_id.cpp",
+        spirv_opt_path ++ "source/val/validate_image.cpp",
+        spirv_opt_path ++ "source/val/validate_instruction.cpp",
+        spirv_opt_path ++ "source/val/validate_interfaces.cpp",
+        spirv_opt_path ++ "source/val/validate_layout.cpp",
+        spirv_opt_path ++ "source/val/validate_literals.cpp",
+        spirv_opt_path ++ "source/val/validate_logicals.cpp",
+        spirv_opt_path ++ "source/val/validate_memory.cpp",
+        spirv_opt_path ++ "source/val/validate_memory_semantics.cpp",
+        spirv_opt_path ++ "source/val/validate_mesh_shading.cpp",
+        spirv_opt_path ++ "source/val/validate_misc.cpp",
+        spirv_opt_path ++ "source/val/validate_mode_setting.cpp",
+        spirv_opt_path ++ "source/val/validate_non_uniform.cpp",
+        spirv_opt_path ++ "source/val/validate_primitives.cpp",
+        spirv_opt_path ++ "source/val/validate_ray_query.cpp",
+        spirv_opt_path ++ "source/val/validate_ray_tracing.cpp",
+        spirv_opt_path ++ "source/val/validate_ray_tracing_reorder.cpp",
+        spirv_opt_path ++ "source/val/validate_scopes.cpp",
+        spirv_opt_path ++ "source/val/validate_small_type_uses.cpp",
+        spirv_opt_path ++ "source/val/validate_type.cpp",
+        spirv_opt_path ++ "source/val/validation_state.cpp",
+    }, .flags = &spirv_opt_cxx_options });
 
     spirv_opt_lib.want_lto = false;
     spirv_opt_lib.linkSystemLibrary("c++");
@@ -288,23 +285,20 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     };
 
     const spirv_cross_path = "3rdparty/bgfx/3rdparty/spirv-cross/";
-    const spirv_cross_lib = b.addStaticLibrary(.{ .name = "spirv-cross", .target = target, .optimize = build_mode});
+    const spirv_cross_lib = b.addStaticLibrary(.{ .name = "spirv-cross", .target = target, .optimize = build_mode });
     spirv_cross_lib.addIncludePath(b.path(spirv_cross_path ++ "include"));
-    spirv_cross_lib.addCSourceFiles(.{
-        .files = &.{
-            spirv_cross_path ++ "spirv_cfg.cpp",
-            spirv_cross_path ++ "spirv_cpp.cpp",
-            spirv_cross_path ++ "spirv_cross.cpp",
-            spirv_cross_path ++ "spirv_cross_parsed_ir.cpp",
-            spirv_cross_path ++ "spirv_cross_util.cpp",
-            spirv_cross_path ++ "spirv_glsl.cpp",
-            spirv_cross_path ++ "spirv_hlsl.cpp",
-            spirv_cross_path ++ "spirv_msl.cpp",
-            spirv_cross_path ++ "spirv_parser.cpp",
-            spirv_cross_path ++ "spirv_reflect.cpp",
-        },
-        .flags = &spirv_cross_cxx_options
-    });
+    spirv_cross_lib.addCSourceFiles(.{ .files = &.{
+        spirv_cross_path ++ "spirv_cfg.cpp",
+        spirv_cross_path ++ "spirv_cpp.cpp",
+        spirv_cross_path ++ "spirv_cross.cpp",
+        spirv_cross_path ++ "spirv_cross_parsed_ir.cpp",
+        spirv_cross_path ++ "spirv_cross_util.cpp",
+        spirv_cross_path ++ "spirv_glsl.cpp",
+        spirv_cross_path ++ "spirv_hlsl.cpp",
+        spirv_cross_path ++ "spirv_msl.cpp",
+        spirv_cross_path ++ "spirv_parser.cpp",
+        spirv_cross_path ++ "spirv_reflect.cpp",
+    }, .flags = &spirv_cross_cxx_options });
 
     spirv_cross_lib.want_lto = false;
     spirv_cross_lib.linkSystemLibrary("c++");
@@ -323,7 +317,7 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     };
 
     const glslang_path = "3rdparty/bgfx/3rdparty/glslang/";
-    const glslang_lib = b.addStaticLibrary(.{ .name = "glslang", .target = target, .optimize = build_mode});
+    const glslang_lib = b.addStaticLibrary(.{ .name = "glslang", .target = target, .optimize = build_mode });
     glslang_lib.addIncludePath(b.path("3rdparty/bgfx/3rdparty"));
     glslang_lib.addIncludePath(b.path(glslang_path));
     glslang_lib.addIncludePath(b.path(glslang_path ++ "include"));
@@ -387,10 +381,10 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     const isLinux = target.result.os.tag == .linux;
 
     if (isWindows) {
-        glslang_lib.addCSourceFile(.{ .file = b.path(glslang_path ++ "glslang/OSDependent/Windows/ossource.cpp"), .flags = &glslang_cxx_options});
+        glslang_lib.addCSourceFile(.{ .file = b.path(glslang_path ++ "glslang/OSDependent/Windows/ossource.cpp"), .flags = &glslang_cxx_options });
     }
     if (isLinux or isMac) {
-        glslang_lib.addCSourceFile(.{ .file = b.path(glslang_path ++ "glslang/OSDependent/Unix/ossource.cpp"), .flags = &glslang_cxx_options});
+        glslang_lib.addCSourceFile(.{ .file = b.path(glslang_path ++ "glslang/OSDependent/Unix/ossource.cpp"), .flags = &glslang_cxx_options });
     }
 
     glslang_lib.want_lto = false;
@@ -436,7 +430,7 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     };
 
     const glsl_optimizer_path = "3rdparty/bgfx/3rdparty/glsl-optimizer/";
-    const glsl_optimizer_lib = b.addStaticLibrary(.{ .name = "glsl-optimizer", .target = target, .optimize = build_mode});
+    const glsl_optimizer_lib = b.addStaticLibrary(.{ .name = "glsl-optimizer", .target = target, .optimize = build_mode });
     glsl_optimizer_lib.addIncludePath(b.path(glsl_optimizer_path ++ "include"));
     glsl_optimizer_lib.addIncludePath(b.path(glsl_optimizer_path ++ "src"));
     glsl_optimizer_lib.addIncludePath(b.path(glsl_optimizer_path ++ "src/mesa"));
@@ -586,7 +580,16 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
 
     exe.addIncludePath(b.path(bx_path ++ "3rdparty"));
     exe.addIncludePath(b.path(bx_path ++ "include"));
-    exe.addIncludePath(b.path(bx_path ++ "/include/compat/osx"));
+    if (isMac) {
+        exe.addIncludePath(b.path(bx_path ++ "include/compat/osx"));
+    } else if (isWindows) {
+        patchMsvcInttypesHeader(b) catch |err| {
+            std.debug.print("Warning: Failed to patch MSVC inttypes.h: {}\n", .{err});
+        };
+        exe.addIncludePath(b.path(bx_path ++ "include/compat/msvc"));
+    } else if (isLinux) {
+        exe.addIncludePath(b.path(bx_path ++ "include/compat/linux"));
+    }
     exe.addIncludePath(b.path("3rdparty/bimg/include"));
     exe.addIncludePath(b.path(bgfx_path ++ "include"));
     exe.addIncludePath(b.path(bgfx_path ++ "src"));
@@ -641,6 +644,37 @@ pub fn build(b: *std.Build, target: std.Build.ResolvedTarget, build_mode: std.bu
     const install_exe = b.addInstallArtifact(exe, .{});
     b.getInstallStep().dependOn(&install_exe.step);
     return exe;
+}
+
+fn patchMsvcInttypesHeader(b: *std.Build) !void {
+    const inttypes_path = "3rdparty/bx/include/compat/msvc/inttypes.h";
+    const full_path = try std.fs.path.join(b.allocator, &.{ b.build_root.path.?, inttypes_path });
+    defer b.allocator.free(full_path);
+
+    const file = try std.fs.openFileAbsolute(full_path, .{ .mode = .read_write });
+    defer file.close();
+
+    const file_size = try file.getEndPos();
+    const content = try b.allocator.alloc(u8, file_size);
+    defer b.allocator.free(content);
+
+    const bytes_read = try file.readAll(content);
+    if (bytes_read != file_size) {
+        return error.IncompleteRead;
+    }
+
+    const error_line = "#error \"Use this header only with Microsoft Visual C++ compilers!\"";
+    const comment_line = "// #error \"Use this header only with Microsoft Visual C++ compilers!\" // Commented out for Zig compatibility";
+
+    const modified_content = try std.mem.replaceOwned(u8, b.allocator, content, error_line, comment_line);
+    defer b.allocator.free(modified_content);
+
+    if (!std.mem.eql(u8, content, modified_content)) {
+        try file.seekTo(0);
+        try file.writeAll(modified_content);
+        try file.setEndPos(modified_content.len);
+        std.debug.print("Successfully patched MSVC inttypes.h for Zig compatibility\n", .{});
+    }
 }
 
 inline fn thisDir() []const u8 {
